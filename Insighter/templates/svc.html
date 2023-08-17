@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<title>SVM</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<!---heading-->
+<div class="upper-section">
+    <h1><i class="bi bi-arrows-move"></i> Support Vector Machines（SVM） </h1>
+</div>
+<div class="lower-section">
+    <div class="main-content">
+        <div class="left-section">
+
+            <div class="form-container">
+                {#        <h2>Data Input</h2>#}
+                <form id="stockForm" action="{% url 'svc_prediction' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label for="stockCode" class="input-label">Enter the stock code：</label>
+                        <input type="text" name="stock_code" class="input-field" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="days" class="input-label">Predict nth trading days:
+                            <p class="notice">n ∈ [1, 500], 1 means the next trading day</p></label>
+                        <input type="number" name="days" class="input-field" min="1" max="500" step="1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="C" class="input-label">* parameter c:
+                            <p class="notice">default will be 1</p></label>
+                        <input type="number" name="C" class="input-field">
+                    </div>
+                    <div class="input-group">
+                        <label for="gamma" class="input-label">* parameter gamma:
+                            <p class="notice">default will be scale</p></label>
+                        <input type="number" name="gamma" class="input-field">
+                    </div>
+                    <button type="submit" class="submit-button">Submit</button>
+                </form>
+                <div class="result-message">
+                    {% if result %}
+                        <p>{{ result }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="center-section">
+            <div class="result-container">
+                <h2>ROC Curve of Test Set</h2>
+                <p class="notice">test set is three-tenths of the 5-year historical data</p>
+                <div class="stockChartContainer">
+                    <canvas id="rocChart"></canvas>
+                    <script>
+                        var fprString = '{{ json_fpr|safe }}';
+                        var tprString = '{{ json_tpr|safe }}';
+                        var fpr = JSON.parse(fprString);
+                        var tpr = JSON.parse(tprString);
+                        console.log(fpr);
+                        console.log(tpr);
+                        var roc_auc = {{ roc_auc }};
+                    </script>
+                    <script src="{% static 'js/drawROC.js' %}"></script>
+                </div>
+            </div>
+
+        </div>
+        <div class="right-section">
+            <div class="result-section">
+                <h2>Prediction Result:</h2>
+                <div class="prediction-container">
+                    {% if pred is not None %}
+                        {% if pred == 1 %}
+                            <p class="prediction-value">Predictions based on the SVM model，{{ stock_code }} will go <span class="go_up">UP</span> on
+                                the {{ days }}th trading days</p>
+                        {% else %}
+                            <p class="prediction-value">Predictions based on the SVM model，{{ stock_code }} will go <span class="go_down">DOWN</span> on
+                                the {{ days }}th trading days</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="classification-report">
+                    <h2>Classification Report of Test Set:</h2>
+                    <div class="chart-container">
+                        <div id="report">
+                            <table class="report-table">
+                                {% for line in report %}
+                                    <tr>
+                                        {% if forloop.counter == 1 %}
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        {% endif %}
+                                        {% if forloop.counter > 1 and forloop.counter < 7 %}
+                                            <td>&nbsp;</td>
+                                        {% endif %}
+                                        {% for value in line %}
+                                            {% if forloop.parentloop.counter == 6 and forloop.counter == 2 %}
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>{{ value|default_if_none:" " }}</td>
+                                            {% else %}
+                                                <td>{{ value|default_if_none:" " }}</td>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <p>Note: Forecast results are for reference only, the stock market is risky, investment should be
+                    cautious!</p>
+
+                <h2>What's more</h2>
+                <p>You can also try <a href="{% url 'lstm' %}">LSTM Model</a></p>
+                <p>Or <a href="{% url 'random_forest' %}">Random Forest Model</a></p>
+                <p>Back to <a href="{% url 'homepage' %}">Homepage</a></p>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>

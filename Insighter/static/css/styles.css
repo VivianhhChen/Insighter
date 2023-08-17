@@ -1,0 +1,268 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e2d3d3;
+}
+.upper-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10%; 
+    background-color: rgb(186, 65, 5);
+    color: #433131;
+}
+
+.lower-section {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90%; 
+}
+
+
+/*Rolling stock data*/
+.stock-scroll-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;    
+}
+
+.stock-item {
+    display: inline-block;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border: 1px solid rgba(37, 31, 31, 0.2);
+    border-radius: 5px; 
+    margin-bottom: 100px;
+}
+
+.stock-item-symbol {
+    font-weight: bold;
+    color: #433131;;
+}
+
+.green {
+    color: #064f06;
+}
+
+.red {
+    color: #ab2e2e;
+}
+
+.scrolling-container {
+    animation: scroll 30s linear infinite;
+    animation-play-state: running;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px; 
+    margin-top: 80px; 
+    position: absolute;
+    left: 300px;
+    right: 300px;
+}
+
+
+.circle-button {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.button-1 {
+    background-color: #a18781; 
+}
+
+.button-2 {
+    background-color: #cd7150; 
+}
+
+.button-3 {
+    background-color: #c54c10; 
+}
+
+
+.label {
+    font-size: 20px;
+    color: #fff;    
+}
+
+.hint {
+    text-align: center; 
+    font-size: 16px;
+    color: #666;
+    margin-top: 400px;
+    bottom: 0; 
+
+}
+
+a {
+    text-decoration: none; 
+}
+
+.form-container {
+    max-width: 200px;
+    margin: 40px 0 0 10px;
+    padding: 20px;
+    color: #433131;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #433131;
+
+}
+
+.input-field {
+    width: 150px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: rgba(183, 125, 125, 0.23);
+}
+
+.submit-button {
+    background-color: rgb(186, 65, 5);
+    color: rgb(231, 223, 209);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.main-content {
+    display: flex;
+}
+
+.left-section {
+    width: 20%;
+    padding-right: 20px;
+    margin-left: 30px;
+}
+.center-section{
+    width: 40%;
+
+}
+.right-section {
+    width: 40%;
+    margin-right: 20px;
+
+}
+.result-container {
+    color: #433131;
+    margin-top: 40px; 
+    text-align: center;
+    height: 500px;
+    background-color: rgba(183, 125, 125, 0.23);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.stockChartContainer{
+    margin-top: 70px;
+}
+
+/*return result*/
+.result-section {
+    margin: 5px 0 0 20px;
+    /* margin-top: 100px; */
+    padding: 20px;
+    color: #433131;
+}
+
+.prediction {
+    margin-bottom: 10px;
+}
+
+.prediction-label, .accuracy-label {
+    font-weight: bold;
+}
+
+.prediction-value {
+    color:  rgb(186, 65, 5);
+}
+
+.report-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.prediction-container{
+    padding: 5px;
+    height: 70px;
+    background-color: rgba(183, 125, 125, 0.23);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /*border: 1px solid rgba(186, 65, 5, 0.38));*/
+
+}
+.chart-container {
+    padding: 5px;
+    height: 180px;
+    background-color: rgba(183, 125, 125, 0.23);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+/*border: 1px solid rgb(186, 65, 5);*/
+}
+
+.report-table {
+    border-bottom: 1px solid rgb(186, 65, 5);
+    color: rgb(186, 65, 5);
+    padding: 8px;
+    text-align: center;
+}
+
+.notice{
+    color: rgb(150, 143, 139);
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.go_up{
+    color:red;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.go_down{
+    color: green;
+    font-weight:bold;
+    font-size: 20px;
+}
+
+
