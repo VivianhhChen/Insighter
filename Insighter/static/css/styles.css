@@ -19,6 +19,15 @@ body {
     color: #433131;
 }
 
+.svc-upper{
+    background: #a18781;
+}
+
+
+.lstm-upper{
+    background: #cd7150;
+}
+
 .lower-section {
     position: absolute;
     bottom: 0;
@@ -128,7 +137,7 @@ a {
 }
 
 .form-container {
-    max-width: 200px;
+    max-width: 220px;
     margin: 40px 0 0 10px;
     padding: 20px;
     color: #433131;
@@ -138,7 +147,9 @@ a {
 }
 
 .input-group {
+    align-self: center;
     margin-bottom: 15px;
+    margin-left: 13px;
 }
 
 .input-label {
@@ -150,11 +161,12 @@ a {
 }
 
 .input-field {
-    width: 150px;
+    width: 180px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: rgba(183, 125, 125, 0.23);
+    align-content: center;
 }
 
 .submit-button {
@@ -171,7 +183,7 @@ a {
 }
 
 .left-section {
-    width: 20%;
+    width: 23%;
     padding-right: 20px;
     margin-left: 30px;
 }
@@ -180,7 +192,7 @@ a {
 
 }
 .right-section {
-    width: 40%;
+    width: 37%;
     margin-right: 20px;
 
 }
@@ -265,4 +277,17 @@ a {
     font-size: 20px;
 }
 
+.forest-button{
+    color: #433131;
+}
+
+.lstm-button{
+    background: #cd7150;
+    color: #433131;
+}
+
+.svc-button{
+    background: #a18781;
+    color: #433131;
+}
 

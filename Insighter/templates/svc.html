@@ -1,9 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<title>SVM</title>
-
 <head>
+    <title>SVM</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
@@ -13,7 +12,7 @@
 
 <body>
 <!---heading-->
-<div class="upper-section">
+<div class="upper-section svc-upper">
     <h1><i class="bi bi-arrows-move"></i> Support Vector Machines（SVM） </h1>
 </div>
 <div class="lower-section">
@@ -21,29 +20,51 @@
         <div class="left-section">
 
             <div class="form-container">
-                {#        <h2>Data Input</h2>#}
                 <form id="stockForm" action="{% url 'svc_prediction' %}" method="post">
                     {% csrf_token %}
                     <div class="input-group">
                         <label for="stockCode" class="input-label">Enter the stock code：</label>
-                        <input type="text" name="stock_code" class="input-field" required>
+                        <label>
+                            <input type="text" name="stock_code" class="input-field" required>
+                        </label>
                     </div>
                     <div class="input-group">
-                        <label for="days" class="input-label">Predict nth trading days:
-                            <p class="notice">n ∈ [1, 500], 1 means the next trading day</p></label>
-                        <input type="number" name="days" class="input-field" min="1" max="500" step="1" required>
+                        <label for="year" class="input-label">Years of historical data</label>
+                        <label>
+                            <input type="number" name="years" class="input-field" min="1" max="20" step="1" required>
+                        </label>
                     </div>
                     <div class="input-group">
-                        <label for="C" class="input-label">* parameter c:
-                            <p class="notice">default will be 1</p></label>
-                        <input type="number" name="C" class="input-field">
+                        <label for="lookback" class="input-label">Look back n trading days:</label>
+                        <p class="notice">n ∈ [1, 100]</p>
+                        <label>
+                            <input type="number" name="lookback" class="input-field" min="1" max="100" step="1"
+                                   required>
+                        </label>
                     </div>
                     <div class="input-group">
-                        <label for="gamma" class="input-label">* parameter gamma:
-                            <p class="notice">default will be scale</p></label>
-                        <input type="number" name="gamma" class="input-field">
+                        <label for="days" class="input-label">Predict nth trading days:</label>
+                        <p class="notice">n <= n of lookback, 1 means the next trading day</p>
+                        <label>
+                            <input type="number" name="days" class="input-field" min="1" max="100" step="1" required>
+                        </label>
                     </div>
-                    <button type="submit" class="submit-button">Submit</button>
+                    <script src="{% static 'lookback.js' %}"></script>
+                    <div class="input-group">
+                        <label for="C" class="input-label">* parameter c:</label>
+                        <p class="notice">default will be 1</p>
+                        <label>
+                            <input type="number" name="C" class="input-field">
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label for="gamma" class="input-label">* parameter gamma:</label>
+                        <p class="notice">default will be scale</p>
+                        <label>
+                            <input type="number" name="gamma" class="input-field">
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-button svc-button">Submit</button>
                 </form>
                 <div class="result-message">
                     {% if result %}
@@ -78,10 +99,12 @@
                 <div class="prediction-container">
                     {% if pred is not None %}
                         {% if pred == 1 %}
-                            <p class="prediction-value">Predictions based on the SVM model，{{ stock_code }} will go <span class="go_up">UP</span> on
+                            <p class="prediction-value">Predictions based on the SVM model，{{ stock_code }} will go
+                                <span class="go_up">UP</span> on
                                 the {{ days }}th trading days</p>
                         {% else %}
-                            <p class="prediction-value">Predictions based on the SVM model，{{ stock_code }} will go <span class="go_down">DOWN</span> on
+                            <p class="prediction-value">Predictions based on the SVM model，{{ stock_code }} will go
+                                <span class="go_down">DOWN</span> on
                                 the {{ days }}th trading days</p>
                         {% endif %}
                     {% endif %}
@@ -131,8 +154,6 @@
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 </body>
 </html>

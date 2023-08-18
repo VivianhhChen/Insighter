@@ -3,7 +3,6 @@ import talib
 import numpy as np
 import pandas as pd
 import yfinance as yf
-from yfinance import Ticker
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
@@ -37,7 +36,9 @@ def svc_prediction(request):
     C = request.POST.get('C', 1.0)
     gamma = request.POST.get('gamma', 'scale')
     stock_code = request.POST.get('stock_code')
+    years = int(request.POST.get('years'))
     days = int(request.POST.get('days'))
+    lookback = int(request.POST.get('lookback'))
     try:
         C = float(C)
     except ValueError:
@@ -49,7 +50,7 @@ def svc_prediction(request):
         gamma = 'scale'
 
     try:
-        org_data = yf.download(f'{stock_code}', period='5y').dropna()
+        org_data = yf.download(f'{stock_code}', period=f'{years}y').dropna()
     except Exception as e:
         error_message = str(e)
         if "n_samples=0" in error_message:
@@ -58,9 +59,9 @@ def svc_prediction(request):
             result = "Please try again."
         return render(request, 'svc.html', {'result': result})
 
-    dataset = dataProcessing(org_data, days)
+    dataset = dataProcessing(org_data, lookback)
     prediction, report, roc_auc, fpr, tpr = svc_predict(dataset, C=C, gamma=gamma)
-    pred = prediction[-1]
+    pred = prediction[days-lookback-1]
     submit_message = "submitted successfully"
     report = [line.split() for line in report.strip().split('\n')]
     json_fpr = json.dumps(fpr.tolist())
@@ -81,6 +82,8 @@ def random_forest_prediction(request):
     n_estimators = request.POST.get('n_estimators', '65')
     stock_code = request.POST.get('stock_code')
     days = int(request.POST.get('days'))
+    lookback = int(request.POST.get('lookback'))
+    years = int(request.POST.get('years'))
     try:
         n_jobs = int(n_jobs)
     except ValueError:
@@ -92,14 +95,14 @@ def random_forest_prediction(request):
         n_estimators = 65
 
     try:
-        org_data = yf.download(f'{stock_code}', period='5y').dropna()
+        org_data = yf.download(f'{stock_code}', period=f'{years}y').dropna()
     except ValueError:
         result = f"Stock code '{stock_code}' does not exist."
         return render(request, 'random_forest.html', {'result': result})
 
-    dataset = dataProcessing(org_data, days)
+    dataset = dataProcessing(org_data, lookback)
     prediction, report, roc_auc, fpr, tpr = random_forest_predict(dataset, n_jobs=n_jobs, n_estimators=n_estimators)
-    pred = prediction[-1]
+    pred = prediction[days-lookback-1]
     submit_message = "submitted successfully"
     report = [line.split() for line in report.strip().split('\n')]
     json_fpr = json.dumps(fpr.tolist())
@@ -120,6 +123,8 @@ def lstm_prediction(request):
     days = int(request.POST.get('days'))
     hidden_dim = request.POST.get('hidden_dim')
     num_epochs = request.POST.get('num_epochs')
+    lookback = int(request.POST.get('lookback'))
+    years = int(request.POST.get('years'))
     try:
         hidden_dim = int(hidden_dim)
     except ValueError:
@@ -131,14 +136,14 @@ def lstm_prediction(request):
         num_epochs = 100
 
     try:
-        org_data = yf.download(f'{stock_code}', period='5y').dropna()
+        org_data = yf.download(f'{stock_code}', period=f'{years}y').dropna()
     except ValueError:
         result = f"Stock code '{stock_code}' does not exist."
         return render(request, 'lstm.html', {'result': result})
 
-    dataset = dataProcessing(org_data, days)
+    dataset = dataProcessing(org_data, lookback)
     prediction, report, roc_auc, fpr, tpr = lstm_predict(dataset, hidden_dim=hidden_dim, num_epochs=num_epochs)
-    pred = prediction[-1]
+    pred = prediction[days-lookback-1]
     submit_message = "submitted successfully"
     report = [line.split() for line in report.strip().split('\n')]
     json_fpr = json.dumps(fpr.tolist())

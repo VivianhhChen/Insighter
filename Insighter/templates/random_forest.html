@@ -1,9 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<title>Random Forest</title>
-
 <head>
+    <title>Random Forest</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
@@ -24,24 +23,47 @@
                     {% csrf_token %}
                     <div class="input-group">
                         <label for="stockCode" class="input-label">Enter the stock code：</label>
-                        <input type="text" name="stock_code" class="input-field" required>
+                        <label>
+                            <input type="text" name="stock_code" class="input-field" required>
+                        </label>
                     </div>
                     <div class="input-group">
-                        <label for="days" class="input-label">Predict nth trading days:
-                             <p class="notice">n ∈ [1, 500], 1 means the next trading day</p></label>
-                        <input type="number" name="days" class="input-field" min="1" max="500" step="1" required>
+                        <label for="year" class="input-label">Years of historical data</label>
+                        <label>
+                            <input type="number" name="years" class="input-field" min="1" max="20" step="1" required>
+                        </label>
+                    </div>
+                  <div class="input-group">
+                        <label for="lookback" class="input-label">Look back n trading days:</label>
+                        <p class="notice">n ∈ [1, 100]</p>
+                        <label>
+                            <input type="number" name="lookback" class="input-field" min="1" max="100" step="1"
+                                   required>
+                        </label>
                     </div>
                     <div class="input-group">
-                        <label for="n_jobs" class="input-label">* parameter n_jobs:
-                            <p class="notice">default will be -1</p></label>
-                        <input type="number" name="n_jobs" class="input-field">
+                        <label for="days" class="input-label">Predict nth trading days:</label>
+                        <p class="notice">n <= n of lookback, 1 means the next trading day</p>
+                        <label>
+                            <input type="number" name="days" class="input-field" min="1" max="100" step="1" required>
+                        </label>
+                    </div>
+                    <script src="{% static 'lookback.js' %}"></script>
+                    <div class="input-group">
+                        <label for="n_jobs" class="input-label">* parameter n_jobs:</label>
+                            <p class="notice">default will be -1</p>
+                        <label>
+                            <input type="number" name="n_jobs" class="input-field">
+                        </label>
                     </div>
                     <div class="input-group">
-                        <label for="n_estimators" class="input-label">* parameter n_estimators:
-                            <p class="notice">default will be 65</p></label>
-                        <input type="number" name="n_estimators" class="input-field">
+                        <label for="n_estimators" class="input-label">* parameter n_estimators:</label>
+                            <p class="notice">default will be 65</p>
+                        <label>
+                            <input type="number" name="n_estimators" class="input-field">
+                        </label>
                     </div>
-                    <button type="submit" class="submit-button">Submit</button>
+                    <button type="submit" class="submit-button forest-button">Submit</button>
                 </form>
                 <div class="result-message">
                     {% if result %}
@@ -128,8 +150,6 @@
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 </body>
 </html>
